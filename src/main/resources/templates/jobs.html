@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>채용정보조회 - 학생정보시스템</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .data-table tbody tr {
+            cursor: pointer;
+        }
+        .data-table .company-cell {
+            font-weight: 600;
+            color: var(--color-primary-dark);
+        }
+        .deadline-cell {
+            color: var(--color-danger);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header('system')}"></header>
+
+<div class="app-body">
+    <aside th:replace="~{fragments/sidebar :: sidebar('jobs')}"></aside>
+
+    <div class="app-content">
+        <div class="breadcrumb">게시판 &gt; 채용정보조회</div>
+        <h2 class="page-title">채용정보조회</h2>
+        <p class="page-desc">취업 지원팀이 등록한 채용정보입니다. 항목을 클릭하면 상세 내용을 확인할 수 있습니다.</p>
+
+        <div class="card">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>기업명</th>
+                    <th>모집직무</th>
+                    <th>고용형태</th>
+                    <th>근무지역</th>
+                    <th>마감일</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="j : ${jobs}"
+                    th:onclick="'location.href=\'' + @{'/jobs/' + ${j.id}} + '\''">
+                    <td class="company-cell" th:text="${j.company}">회사</td>
+                    <td th:text="${j.role}">직무</td>
+                    <td th:text="${j.employmentType}">고용형태</td>
+                    <td th:text="${j.region}">지역</td>
+                    <td class="deadline-cell" th:text="${#temporals.format(j.deadline, 'M월 d일')}">마감일</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="empty-state" th:if="${jobs.isEmpty()}">등록된 채용정보가 없습니다.</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

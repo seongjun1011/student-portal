@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!--
+    공통 상단 헤더.
+    activeTab 파라미터로 "home" / "system" 중 어떤 메뉴를 강조할지 결정한다.
+-->
+<header class="app-header" th:fragment="header(activeTab)">
+    <a th:href="@{/}" class="brand">
+        성준대학교
+        <span class="badge">학생정보시스템</span>
+    </a>
+    <nav>
+        <a th:href="@{/}" th:classappend="${activeTab == 'home'} ? 'active'">홈</a>
+        <a th:href="@{/courses}" th:classappend="${activeTab == 'system'} ? 'active'">학생정보시스템</a>
+        <a th:href="@{/notices}">공지사항</a>
+        <a th:href="@{/jobs}">채용정보</a>
+    </nav>
+    <div class="user-area">
+        <span th:if="${session.loginStudent != null}"
+              th:text="${session.loginStudent.department + ' ' + session.loginStudent.name + '님'}">학생님</span>
+        <a class="logout-btn" th:href="@{/logout}">로그아웃</a>
+    </div>
+</header>
+
+</body>
+</html>

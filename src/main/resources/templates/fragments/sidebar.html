@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!--
+    학생정보시스템 좌측 메뉴 트리.
+    active 파라미터(예: "mypage", "courses")로 현재 페이지에 해당하는 메뉴를 강조한다.
+    실제 학교 시스템의 메뉴 구조를 최대한 그대로 옮기되, 이번 과제에서 실제로 구현한 기능 위주로
+    동작하도록 했고 나머지는 비활성(placeholder) 메뉴로 남겨두었다.
+-->
+<aside class="app-sidebar" th:fragment="sidebar(active)">
+    <div class="sidebar-title">성준대학교</div>
+
+    <div class="menu-group">
+        <div class="menu-group-title">학적 / 학생</div>
+        <a class="menu-item" th:classappend="${active == 'mypage'} ? 'active'" th:href="@{/mypage}">개인신상정보수정</a>
+        <a class="menu-item" th:classappend="${active == 'schedule'} ? 'active'" th:href="@{/schedule}">학사일정조회</a>
+        <a class="menu-item" th:classappend="${active == 'leave'} ? 'active'" th:href="@{/leave}">휴학/복학신청</a>
+        <a class="menu-item disabled" href="#" onclick="return false;">증명서발급신청</a>
+    </div>
+
+    <div class="menu-group">
+        <div class="menu-group-title">장학 / 등록</div>
+        <a class="menu-item" th:classappend="${active == 'scholarship'} ? 'active'" th:href="@{/scholarship}">장학금신청</a>
+        <a class="menu-item disabled" href="#" onclick="return false;">등록금고지서조회</a>
+        <a class="menu-item disabled" href="#" onclick="return false;">등록현황조회</a>
+    </div>
+
+    <div class="menu-group">
+        <div class="menu-group-title">수업 / 성적</div>
+        <a class="menu-item" th:classappend="${active == 'courses'} ? 'active'" th:href="@{/courses}">수강신청</a>
+        <a class="menu-item" th:classappend="${active == 'enrollments'} ? 'active'" th:href="@{/enrollments}">수강신청내역조회</a>
+        <a class="menu-item" th:classappend="${active == 'timetable'} ? 'active'" th:href="@{/timetable}">개인시간표조회</a>
+        <a class="menu-item disabled" href="#" onclick="return false;">성적조회</a>
+    </div>
+
+    <div class="menu-group">
+        <div class="menu-group-title">게시판</div>
+        <a class="menu-item" th:classappend="${active == 'notices'} ? 'active'" th:href="@{/notices}">공지사항</a>
+        <a class="menu-item" th:classappend="${active == 'jobs'} ? 'active'" th:href="@{/jobs}">채용정보조회</a>
+    </div>
+</aside>
+
+</body>
+</html>

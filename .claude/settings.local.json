@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp /Users/seongjun/Documents/WebPrograming/student-portal/src/main/resources/templates/jobs.html /Users/seongjun/Documents/WebPrograming/student-portal/target/classes/templates/jobs.html)",
+      "Bash(cp /Users/seongjun/Documents/WebPrograming/student-portal/src/main/resources/templates/job-detail.html /Users/seongjun/Documents/WebPrograming/student-portal/target/classes/templates/job-detail.html)",
+      "Bash(xargs ls)",
+      "Bash(mvn compile *)",
+      "Bash(./mvnw compile *)",
+      "Bash(java -version)",
+      "Read(//Users/seongjun/.m2/wrapper/**)",
+      "Read(//usr/local/**)",
+      "Bash(javap -verbose /Users/seongjun/Documents/WebPrograming/student-portal/target/classes/com/kopo/portal/service/ScholarshipService.class)"
+    ]
+  }
+}

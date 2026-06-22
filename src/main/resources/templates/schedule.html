@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>학사일정조회 - 학생정보시스템</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header('system')}"></header>
+
+<div class="app-body">
+    <aside th:replace="~{fragments/sidebar :: sidebar('schedule')}"></aside>
+
+    <div class="app-content">
+        <div class="breadcrumb">학적/학생 &gt; 학사일정조회</div>
+        <h2 class="page-title">학사일정조회</h2>
+
+        <div class="card">
+            <div class="card-title" style="justify-content:center; gap:24px;">
+                <a class="btn btn-outline btn-sm" th:href="@{/schedule(month=${prevMonth})}">‹ 이전달</a>
+                <span th:text="${month.year + '년 ' + month.monthValue + '월'}">2026년 6월</span>
+                <a class="btn btn-outline btn-sm" th:href="@{/schedule(month=${nextMonth})}">다음달 ›</a>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th style="width: 160px;">기간</th>
+                    <th>일정</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="s : ${schedules}">
+                    <td th:text="${s.displayRange}">06-01</td>
+                    <td th:text="${s.title}">일정명</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="empty-state" th:if="${schedules.isEmpty()}">해당 월에 등록된 학사일정이 없습니다.</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

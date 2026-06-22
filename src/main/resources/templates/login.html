@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 - 학생정보시스템</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="login-wrap">
+    <div class="login-box">
+        <h1>학생정보시스템</h1>
+        <p class="sub">성준대학교 통합 학생정보시스템</p>
+
+        <div class="alert error" th:if="${error}" th:text="${error}"></div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="form-row">
+                <label for="loginId">학번 / 아이디</label>
+                <input type="text" id="loginId" name="loginId" placeholder="학번을 입력하세요" required>
+            </div>
+            <div class="form-row">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+            </div>
+            <button type="submit" class="btn">로그인</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

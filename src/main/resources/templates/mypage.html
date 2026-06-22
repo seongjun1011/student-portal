@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>개인신상정보수정 - 학생정보시스템</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header('system')}"></header>
+
+<div class="app-body">
+    <aside th:replace="~{fragments/sidebar :: sidebar('mypage')}"></aside>
+
+    <div class="app-content">
+        <div class="breadcrumb">학적/학생 &gt; 개인신상정보수정</div>
+        <h2 class="page-title">개인신상정보수정</h2>
+        <p class="page-desc">연락처, 주소, 계좌번호를 수정할 수 있습니다. 학과 및 캠퍼스 변경은 학생처에 문의하세요.</p>
+
+        <div th:if="${success}" class="alert success">저장되었습니다.</div>
+
+        <div class="card" style="max-width: 560px;">
+            <form th:action="@{/mypage}" method="post">
+
+                <p style="font-size: 12.5px; color: var(--color-text-light); margin: 0 0 14px; font-weight: 600;">기본 정보 (변경 불가)</p>
+
+                <div class="form-row">
+                    <label>학번</label>
+                    <input type="text" th:value="${student.loginId}" disabled>
+                </div>
+                <div class="form-row">
+                    <label>이름</label>
+                    <input type="text" th:value="${student.name}" disabled>
+                </div>
+                <div class="form-row">
+                    <label>학년</label>
+                    <input type="text" th:value="${student.grade}" disabled>
+                </div>
+                <div class="form-row">
+                    <label>학과</label>
+                    <input type="text" th:value="${student.department}" disabled>
+                </div>
+                <div class="form-row">
+                    <label>캠퍼스</label>
+                    <input type="text" th:value="${student.campus}" disabled>
+                </div>
+
+                <hr style="border: none; border-top: 1px solid var(--color-border); margin: 20px 0;">
+                <p style="font-size: 12.5px; color: var(--color-text-light); margin: 0 0 14px; font-weight: 600;">수정 가능한 정보</p>
+
+                <div class="form-row">
+                    <label for="phone">연락처</label>
+                    <input type="tel" id="phone" name="phone"
+                           th:value="${student.phone}"
+                           placeholder="010-0000-0000">
+                </div>
+                <div class="form-row">
+                    <label for="address">집 주소</label>
+                    <input type="text" id="address" name="address"
+                           th:value="${student.address}"
+                           placeholder="예) 서울특별시 마포구 ...">
+                </div>
+                <div class="form-row">
+                    <label for="accountNumber">계좌번호</label>
+                    <input type="text" id="accountNumber" name="accountNumber"
+                           th:value="${student.accountNumber}"
+                           placeholder="예) 국민 123456-78-901234">
+                </div>
+
+                <button type="submit" class="btn" style="margin-top: 4px;">저장</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>개인시간표조회 - 학생정보시스템</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .tt-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        .tt-table th {
+            background: #f0f4fa;
+            color: var(--color-primary-dark);
+            font-size: 13px;
+            font-weight: 700;
+            padding: 10px 6px;
+            text-align: center;
+            border: 1px solid var(--color-border);
+        }
+        .tt-table .time-col {
+            width: 100px;
+            background: #f8f9fb;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid var(--color-border);
+            padding: 10px 6px;
+        }
+        .tt-table .time-col .p-num {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+        .tt-table .time-col .p-time {
+            font-size: 10.5px;
+            color: var(--color-text-light);
+            margin-top: 2px;
+        }
+        .tt-table .day-cell {
+            border: 1px solid var(--color-border);
+            padding: 5px;
+            vertical-align: top;
+            height: 56px;
+        }
+        .tt-chip {
+            border-radius: 5px;
+            padding: 6px 8px;
+            font-size: 12px;
+            line-height: 1.4;
+            height: 100%;
+        }
+        .tt-chip .c-name {
+            font-weight: 700;
+            display: block;
+        }
+        .tt-chip .c-meta {
+            font-size: 11px;
+            opacity: 0.82;
+        }
+        .tt-cont {
+            border-radius: 0 0 4px 4px;
+            height: 100%;
+            opacity: 0.35;
+        }
+        .color-0 { background: #ddeeff; color: #1a4a80; border-left: 3px solid #4488cc; }
+        .color-1 { background: #e8f5e9; color: #1b5e20; border-left: 3px solid #4caf50; }
+        .color-2 { background: #fff3e0; color: #7a4200; border-left: 3px solid #ff9800; }
+        .color-3 { background: #fce4ec; color: #7b1034; border-left: 3px solid #e91e63; }
+        .color-4 { background: #ede7f6; color: #311b92; border-left: 3px solid #7c4dff; }
+
+        .summary-row {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+        .summary-item {
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 13px 20px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .summary-item .s-label {
+            font-size: 11.5px;
+            color: var(--color-text-light);
+            margin-bottom: 3px;
+        }
+        .summary-item .s-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-primary-dark);
+        }
+        .summary-item .s-unit {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--color-text-light);
+        }
+    </style>
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header('system')}"></header>
+
+<div class="app-body">
+    <aside th:replace="~{fragments/sidebar :: sidebar('timetable')}"></aside>
+
+    <div class="app-content">
+        <div class="breadcrumb">수업/성적 &gt; 개인시간표조회</div>
+        <h2 class="page-title">개인시간표조회</h2>
+        <p class="page-desc">수강신청 내역을 기준으로 자동 생성된 시간표입니다.</p>
+
+        <!-- 요약 -->
+        <div class="summary-row">
+            <div class="summary-item">
+                <div class="s-label">신청 과목 수</div>
+                <div class="s-value">
+                    <span th:text="${enrolled.size()}">0</span><span class="s-unit"> 과목</span>
+                </div>
+            </div>
+            <div class="summary-item">
+                <div class="s-label">주간 수업 일수</div>
+                <div class="s-value">
+                    <span th:text="${activeDayCount}">0</span><span class="s-unit"> 일</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 시간표 그리드 -->
+        <div class="card" th:if="${!enrolled.isEmpty()}">
+            <table class="tt-table">
+                <thead>
+                <tr>
+                    <th style="width:100px;">교시</th>
+                    <th th:each="day : ${days}" th:text="${day + '요일'}">월요일</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="row : ${grid}">
+                    <td class="time-col">
+                        <div class="p-num" th:text="${row.period}">1교시</div>
+                        <div class="p-time" th:text="${row.time}">09:00</div>
+                    </td>
+                    <td class="day-cell" th:each="cell : ${row.cells}">
+                        <div th:if="${!cell.empty and cell.start}"
+                             th:class="'tt-chip color-' + ${cell.color}">
+                            <span class="c-name" th:text="${cell.name}">과목명</span>
+                            <span class="c-meta" th:text="${cell.professor + ' · ' + cell.location}">교수 · 강의실</span>
+                        </div>
+                        <div th:if="${!cell.empty and !cell.start}"
+                             th:class="'tt-cont color-' + ${cell.color}">
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 수강신청 없을 때 -->
+        <div class="card" th:if="${enrolled.isEmpty()}">
+            <div class="empty-state">
+                아직 수강신청한 과목이 없어요.<br>
+                <a th:href="@{/courses}" style="color: var(--color-primary); margin-top: 8px; display:inline-block;">수강신청 하러 가기 →</a>
+            </div>
+        </div>
+
+        <!-- 수강 과목 목록 -->
+        <div class="card" th:if="${!enrolled.isEmpty()}">
+            <div class="card-title">수강 과목 목록</div>
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>과목명</th>
+                    <th>담당교수</th>
+                    <th>요일</th>
+                    <th>교시</th>
+                    <th>강의실</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="c : ${enrolled}">
+                    <td th:text="${c.name}">과목명</td>
+                    <td th:text="${c.professor}">교수</td>
+                    <td th:text="${c.dayOfWeek + '요일'}">월요일</td>
+                    <td th:text="${c.startPeriod + '교시 ~ ' + c.endPeriod + '교시'}">1교시 ~ 2교시</td>
+                    <td th:text="${c.location}">강의실</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

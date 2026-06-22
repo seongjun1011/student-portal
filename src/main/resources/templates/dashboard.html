@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>홈 - 학생정보시스템</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header('home')}"></header>
+
+<div class="app-content">
+
+    <div class="greeting-box">
+        <div>
+            <div class="name">안녕하세요, <span th:text="${student.name}">학생</span>님 👋</div>
+            <div class="meta">
+                <span th:text="${student.department + ' · ' + student.grade}">학과 학년</span>
+                &nbsp;·&nbsp; 마지막 접속 <span th:text="${#temporals.format(student.lastLoginAt, 'M월 d일 HH:mm')}">-</span>
+            </div>
+        </div>
+        <div class="weather-box" th:if="${weather != null}">
+            <div class="temp" th:text="${#numbers.formatDecimal(weather.temperature, 1, 1) + '℃'}">--℃</div>
+            <div>
+                <div th:text="${weather.cityName}">서울</div>
+                <div class="desc" th:text="${weather.description + ' · 풍속 ' + weather.windSpeed + 'm/s'}">날씨</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="quick-menu">
+        <a th:href="@{/courses}"><span class="icon">📝</span>수강신청</a>
+        <a th:href="@{/enrollments}"><span class="icon">📋</span>신청내역</a>
+        <a th:href="@{/timetable}"><span class="icon">🗓️</span>시간표조회</a>
+        <a th:href="@{/schedule}"><span class="icon">📅</span>학사일정</a>
+        <a th:href="@{/scholarship}"><span class="icon">💰</span>장학금신청</a>
+        <a th:href="@{/leave}"><span class="icon">🏫</span>휴학/복학</a>
+        <a th:href="@{/notices}"><span class="icon">📢</span>공지사항</a>
+        <a th:href="@{/jobs}"><span class="icon">💼</span>채용정보</a>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            주간 시간표
+            <a class="more-link" th:href="@{/timetable}">전체보기 ›</a>
+        </div>
+        <div class="timetable-grid">
+            <div class="day-col" th:each="day : ${ {'월','화','수','목','금','토'} }">
+                <h4 th:text="${day}">월</h4>
+                <div th:each="c : ${enrolledCourses}" th:if="${c.dayOfWeek == day}" class="course-chip">
+                    <span class="c-name" th:text="${c.name}">과목명</span>
+                    <span th:text="${c.period + ' · ' + c.location}">교시 · 강의실</span>
+                </div>
+            </div>
+        </div>
+        <div class="empty-state" th:if="${enrolledCourses.isEmpty()}">아직 신청한 강좌가 없어요. <a th:href="@{/courses}" style="color: var(--color-primary);">수강신청</a>하러 가볼까요?</div>
+    </div>
+
+    <div class="widget-grid">
+        <div class="card">
+            <div class="card-title">
+                이번 달 학사일정
+                <a class="more-link" th:href="@{/schedule}">전체보기 ›</a>
+            </div>
+            <ul class="simple-list">
+                <li th:each="s : ${schedules}">
+                    <span th:text="${s.title}">일정</span>
+                    <span class="item-date" th:text="${s.displayRange}">06-01</span>
+                </li>
+            </ul>
+            <div class="empty-state" th:if="${schedules.isEmpty()}">이번 달 예정된 일정이 없어요.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                채용정보조회
+                <a class="more-link" th:href="@{/jobs}">전체보기 ›</a>
+            </div>
+            <ul class="simple-list">
+                <li th:each="j : ${jobs}">
+                    <span th:text="${j.company + ' · ' + j.role}">회사 · 직무</span>
+                    <span class="item-date" th:text="${'~' + #temporals.format(j.deadline, 'MM-dd')}">마감일</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                공지사항
+                <a class="more-link" th:href="@{/notices}">전체보기 ›</a>
+            </div>
+            <ul class="simple-list">
+                <li th:each="n : ${notices}">
+                    <a th:href="@{'/notices/' + ${n.id}}" th:text="${n.title}">제목</a>
+                    <span class="item-date" th:text="${#temporals.format(n.createdAt, 'MM-dd')}">06-01</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
+

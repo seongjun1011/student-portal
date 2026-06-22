@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>수강신청 - 학생정보시스템</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header('system')}"></header>
+
+<div class="app-body">
+    <aside th:replace="~{fragments/sidebar :: sidebar('courses')}"></aside>
+
+    <div class="app-content">
+        <div class="breadcrumb">수업/성적 &gt; 수강신청</div>
+        <h2 class="page-title">수강신청</h2>
+        <p class="page-desc">개설된 강좌를 조회하고 신청합니다. 정원이 초과된 강좌는 신청할 수 없습니다.</p>
+
+        <div class="alert error" th:if="${error}" th:text="${error}"></div>
+
+        <div class="card">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>과목명</th>
+                    <th>담당교수</th>
+                    <th>요일/교시</th>
+                    <th>강의실</th>
+                    <th>정원</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="c : ${courses}">
+                    <td th:text="${c.name}">과목명</td>
+                    <td th:text="${c.professor}">교수명</td>
+                    <td th:text="${c.dayOfWeek + ' ' + c.period}">월 1-2교시</td>
+                    <td th:text="${c.location}">강의실</td>
+                    <td>
+                        <span th:text="${c.enrolledCount + ' / ' + c.capacity}">0 / 30</span>
+                        <span class="badge full" th:if="${c.isFull()}">마감</span>
+                        <span class="badge ok" th:unless="${c.isFull()}">신청가능</span>
+                    </td>
+                    <td>
+                        <form th:if="${enrolledIds.contains(c.id)}" th:action="@{'/courses/' + ${c.id} + '/cancel'}" method="post">
+                            <button type="submit" class="btn btn-danger btn-sm">신청취소</button>
+                        </form>
+                        <form th:unless="${enrolledIds.contains(c.id)}" th:action="@{'/courses/' + ${c.id} + '/enroll'}" method="post"
+                              th:data-name="${c.name}" onsubmit="return confirm(this.dataset.name + ' 수강신청 하시겠습니까?')">
+                            <button type="submit" class="btn btn-sm" th:disabled="${c.isFull()}">수강신청</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

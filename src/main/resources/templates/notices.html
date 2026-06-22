@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항 - 학생정보시스템</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header('system')}"></header>
+
+<div class="app-body">
+    <aside th:replace="~{fragments/sidebar :: sidebar('notices')}"></aside>
+
+    <div class="app-content">
+        <div class="breadcrumb">게시판 &gt; 공지사항</div>
+        <h2 class="page-title">공지사항</h2>
+
+        <div class="card">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th style="width: 60px;">번호</th>
+                    <th>제목</th>
+                    <th style="width: 120px;">작성자</th>
+                    <th style="width: 140px;">작성일</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="n : ${notices}">
+                    <td th:text="${n.id}">1</td>
+                    <td><a th:href="@{'/notices/' + ${n.id}}" th:text="${n.title}">제목</a></td>
+                    <td th:text="${n.writer}">작성자</td>
+                    <td th:text="${#temporals.format(n.createdAt, 'yyyy-MM-dd')}">2026-06-01</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="empty-state" th:if="${notices.isEmpty()}">등록된 공지사항이 없습니다.</div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

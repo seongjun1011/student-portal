@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${job != null ? job.company + ' - 채용정보' : '채용정보'}">채용정보</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .job-header {
+            background: linear-gradient(130deg, #1e4080 0%, #2f5faa 100%);
+            color: #fff;
+            border-radius: 8px;
+            padding: 24px 28px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 16px rgba(30, 64, 128, 0.2);
+        }
+        .job-header .company-name {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+            margin-bottom: 6px;
+        }
+        .job-header .role-name {
+            font-size: 15px;
+            opacity: 0.88;
+        }
+        .job-header .tags {
+            margin-top: 14px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .job-header .tag {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 20px;
+            padding: 3px 12px;
+            font-size: 12.5px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .info-item {
+            background: #f6f8fb;
+            border-radius: 6px;
+            padding: 13px 16px;
+        }
+        .info-item .label {
+            font-size: 11.5px;
+            color: var(--color-text-light);
+            margin-bottom: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .info-item .value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin: 0 0 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--color-primary-light);
+            color: var(--color-primary-dark);
+        }
+        .content-box {
+            font-size: 13.5px;
+            line-height: 1.8;
+            color: var(--color-text);
+            white-space: pre-line;
+        }
+        .deadline-warning {
+            background: #fff8e6;
+            border: 1px solid #f0d080;
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-size: 13px;
+            color: #7a5a00;
+            margin-bottom: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header('system')}"></header>
+
+<div class="app-body">
+    <aside th:replace="~{fragments/sidebar :: sidebar('jobs')}"></aside>
+
+    <div class="app-content">
+        <div class="breadcrumb">게시판 &gt; 채용정보조회 &gt; 상세</div>
+
+        <div th:if="${job != null}">
+
+            <div class="job-header">
+                <div class="company-name" th:text="${job.company}">회사명</div>
+                <div class="role-name" th:text="${job.role}">직무</div>
+                <div class="tags">
+                    <span class="tag" th:text="${job.region}">지역</span>
+                    <span class="tag" th:text="${job.employmentType}">고용형태</span>
+                    <span class="tag" th:text="${'급여 ' + job.salary}">급여</span>
+                </div>
+            </div>
+
+            <div class="deadline-warning">
+                📅 접수 마감일: <strong th:text="${#temporals.format(job.deadline, 'yyyy년 M월 d일')}">마감일</strong>
+                &nbsp;·&nbsp; 등록일: <span th:text="${#temporals.format(job.requestedDate, 'yyyy년 M월 d일')}">등록일</span>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="label">기업명</div>
+                    <div class="value" th:text="${job.company}">회사</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">모집직무</div>
+                    <div class="value" th:text="${job.role}">직무</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">근무지역</div>
+                    <div class="value" th:text="${job.region}">지역</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">고용형태</div>
+                    <div class="value" th:text="${job.employmentType}">정규직</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">채용 내용</div>
+                <div class="content-box" th:text="${job.description}">내용</div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">지원 자격</div>
+                <div class="content-box" th:text="${job.requirements}">자격요건</div>
+            </div>
+
+            <a class="btn btn-outline btn-sm" th:href="@{/jobs}">← 목록으로</a>
+        </div>
+
+        <div th:if="${job == null}" class="card">
+            <div class="empty-state">존재하지 않는 채용정보입니다.</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

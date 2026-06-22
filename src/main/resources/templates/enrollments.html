@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>수강신청내역조회 - 학생정보시스템</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header('system')}"></header>
+
+<div class="app-body">
+    <aside th:replace="~{fragments/sidebar :: sidebar('enrollments')}"></aside>
+
+    <div class="app-content">
+        <div class="breadcrumb">수업/성적 &gt; 수강신청내역조회</div>
+        <h2 class="page-title">수강신청내역조회</h2>
+        <p class="page-desc">현재 신청한 강좌 목록입니다.</p>
+
+        <div class="card">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>과목명</th>
+                    <th>담당교수</th>
+                    <th>요일/교시</th>
+                    <th>강의실</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="c : ${courses}">
+                    <td th:text="${c.name}">과목명</td>
+                    <td th:text="${c.professor}">교수명</td>
+                    <td th:text="${c.dayOfWeek + ' ' + c.period}">월 1-2교시</td>
+                    <td th:text="${c.location}">강의실</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="empty-state" th:if="${courses.isEmpty()}">신청한 강좌가 없습니다.</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

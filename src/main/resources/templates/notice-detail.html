@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항 - 학생정보시스템</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header('system')}"></header>
+
+<div class="app-body">
+    <aside th:replace="~{fragments/sidebar :: sidebar('notices')}"></aside>
+
+    <div class="app-content">
+        <div class="breadcrumb">게시판 &gt; 공지사항</div>
+
+        <div th:if="${notice != null}" class="card">
+            <h2 class="page-title" th:text="${notice.title}">제목</h2>
+            <p class="page-desc" th:text="${notice.writer + ' · ' + #temporals.format(notice.createdAt, 'yyyy-MM-dd HH:mm')}">작성자 · 작성일</p>
+            <hr style="border:none;border-top:1px solid var(--color-border); margin: 16px 0;">
+            <p style="line-height: 1.7; white-space: pre-line;" th:text="${notice.content}">내용</p>
+            <a class="btn btn-outline btn-sm" th:href="@{/notices}" style="margin-top: 20px; display:inline-block;">목록으로</a>
+        </div>
+
+        <div th:if="${notice == null}" class="card">
+            <div class="empty-state">존재하지 않는 공지사항입니다.</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
